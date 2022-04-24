@@ -31,8 +31,10 @@ export class Bot {
             if (message.author.bot) return;
             if (message.author.id !== DISCONNECT_ID) return;
 
-            const rand = random.int(0, 101);
-            if (rand <= 1) {
+            
+            const rand = random.int(0, 5001);
+            console.log(`${message.author.tag} rolled ${rand}`);
+            if (rand <= 50) {
                 await message.member?.voice.disconnect() ?? console.error('Failed to disconnect from voice channel');
             }
         });

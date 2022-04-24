@@ -1,2 +1,0 @@
-export const TRIANGLE_ID = '878964095494266881';
-export const MY_ID = '214467197093937153';

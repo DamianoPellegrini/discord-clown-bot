@@ -1,0 +1,2 @@
+export const TRIANGLE_ID = '967556697952505906';
+export const MY_ID = '214467197093937153';

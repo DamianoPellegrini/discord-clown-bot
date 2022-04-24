@@ -1,0 +1,42 @@
+{
+  "name": "discord-clown-bot",
+  "version": "0.1.0",
+  "description": "A clown bot for discord",
+  "main": "./dist/main.js",
+  "bin": "./dist/main.js",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/main.d.ts",
+  "author": {
+    "name": "DamianoPellegrini",
+    "email": "damiano1.pellegrini@gmail.com"
+  },
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "discord-api-types": "^0.31.2",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "random": "^3.0.6",
+    "reflect-metadata": "^0.1.13"
+  },
+  "packageManager": "yarn@3.2.0",
+  "devDependencies": {
+    "@types/node": "^17.0.25",
+    "@types/rimraf": "^3",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "^8.14.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.3"
+  },
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "build": "tsc",
+    "lint": "eslint --ext .ts src/",
+    "prestart": "build",
+    "start": "node ./dist/main.js"
+  }
+}

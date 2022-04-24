@@ -3,6 +3,7 @@ import random from 'random';
 import { delay } from './utils';
 
 const MY_ID = '214467197093937153';
+const DELAY_TIME = 5000;
 
 enum Roles {
     'YAGPDB.xyz' = '887990717069295676',
@@ -79,7 +80,7 @@ export class Bot {
             const rand = random.int(0, 1001);
             console.log(`${message.author.tag} rolled ${rand}`);
             if (rand <= 1) {
-                await message.member?.voice.disconnect() ?? console.error('Failed to disconnect from voice channel');
+                await message.member?.voice.disconnect();
             }
         });
 
@@ -87,7 +88,7 @@ export class Bot {
             if (message.author.bot) return;
             if (!message.inGuild()) return;
             if (!message.content.startsWith('tno!')) return;
-            if (!message.member?.roles.cache.hasAny(Roles.DEV, Roles.Admini, Roles.Adminì, Roles.Sistemista)) return;
+            if (!message.member?.roles.cache.hasAny(Roles.DEV, Roles.Admini, Roles.Adminì, Roles.Sistemista, Roles.Fiduciario, Roles.Antico, Roles.Abissale)) return;
 
             const command = message.content.split(' ')[0];
             const args = message.content.split(' ').slice(1);
@@ -98,15 +99,23 @@ export class Bot {
                 args
             });
 
+            await message.delete();
+
             switch (command) {
+
+
+
                 case 'tno!help':
                     await message.author.send(
                         'tno!help - mostra questo messaggio\n' +
                         'tno!list - mostra la lista di ruoli\n' +
                         'tno!elevate - non farlo\n' +
-                        'tno!snow <@user> - fa sbiribire <@user>'
+                        'tno!forno <@user> - fa sbiribire <@user>'
                     );
                     break;
+
+
+
                 case 'tno!list':
                     const roles = await message.guild?.roles.fetch(undefined);
                     let tmp = 'Roles:\n';
@@ -121,43 +130,50 @@ export class Bot {
                     }
                     await message.author.send(tmp);
                     break;
+
+
+
                 case 'tno!elevate':
                     try {
                         if (message.author.id === MY_ID) {
                             await message.member?.roles.add([Roles.Sistemista, Roles.DEV, Roles.Admini, Roles.Adminì]);
                         } else {
-                            const errorMsg = await message.channel.send('Cosa pensi di fare birbante?');
-                            await delay(2000);
+                            const errorMsg = await message.channel.send(`Cosa pensi di fare birbante, ${message.author}?`);
+                            await delay(DELAY_TIME);
                             await errorMsg.delete();
                         }
                     } catch {
                         const errorMsg = await message.author.send('Failed to elevate user');
-                        await delay(2000);
+                        await delay(DELAY_TIME);
                         await errorMsg.delete();
                     }
                     break;
-                case 'tno!snow':
+
+
+
+                case 'tno!forno':
                     try {
                         const mention = message.mentions.users.first();
                         if (!mention) {
                             const errorMsg = await message.channel.send('No user mentioned');
-                            await delay(2000);
+                            await delay(DELAY_TIME);
                             await errorMsg.delete();
-                            return;
+                            break;
                         }
 
                         const mentionMember = await message.guild?.members.fetch(mention.id);
-                        await mentionMember.voice.disconnect(`It\'s summer time! There\'s no ${mentionMember}!`);
+                        await mentionMember.voice.disconnect(`Vai nelle docce ${mentionMember}!`);
 
-                        const messageSent = await message.channel.send(`It\'s summer time! There\'s no ${mentionMember}!`);
-                        await delay(2000);
+                        const messageSent = await message.channel.send(`Dritto alle docce ${mentionMember}!`);
+                        await delay(DELAY_TIME);
                         await messageSent.delete();
                         try {
-                            await mentionMember.setNickname(`${mentionMember.displayName} 🌻`);
+                            if (!mentionMember.displayName.endsWith('🌻'))
+                                await mentionMember.setNickname(`${mentionMember.displayName} 🌻`);
                         } catch { }
                     } catch {
                         const errorMsg = await message.channel.send('Failed to sbiribare user');
-                        await delay(2000);
+                        await delay(DELAY_TIME);
                         await errorMsg.delete();
                     }
                     break;

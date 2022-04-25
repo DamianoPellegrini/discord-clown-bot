@@ -1,4 +1,4 @@
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, MessageFlags } from 'discord.js';
 import random from 'random';
 import { delay } from './utils';
 
@@ -161,16 +161,35 @@ export class Bot {
                             break;
                         }
 
-                        const mentionMember = await message.guild?.members.fetch(mention.id);
-                        await mentionMember.voice.disconnect(`Vai nelle docce ${mentionMember}!`);
+                        for (const [memberId, mentionMember] of message.mentions.users) {
+                            const mentionMember = await message.guild?.members.fetch(memberId);
+                            await mentionMember.voice.disconnect(`Vai nelle docce ${mentionMember}!`);
 
-                        const messageSent = await message.channel.send(`Dritto alle docce ${mentionMember}!`);
+                            const messageSent = await message.channel.send(`Dritto alle docce ${mentionMember}!`);
+                            await delay(DELAY_TIME);
+                            await messageSent.delete();
+                            try {
+                                if (!mentionMember.displayName.endsWith('🌻'))
+                                    await mentionMember.setNickname(`${mentionMember.displayName} 🌻`);
+                            } catch { }
+                        }
+                    } catch {
+                        const errorMsg = await message.channel.send('Failed to sbiribare user');
                         await delay(DELAY_TIME);
-                        await messageSent.delete();
-                        try {
-                            if (!mentionMember.displayName.endsWith('🌻'))
-                                await mentionMember.setNickname(`${mentionMember.displayName} 🌻`);
-                        } catch { }
+                        await errorMsg.delete();
+                    }
+                    break;
+
+
+
+                case 'tno!tuttigiunelfosso':
+                    try {
+                        for (const [id, member] of message.member?.voice.channel?.members ?? []) {
+                            await member.voice.disconnect();
+                        }
+                        const msg = await message.channel.send('Tutti giù nel fosso!');
+                        await delay(DELAY_TIME);
+                        await msg.delete();
                     } catch {
                         const errorMsg = await message.channel.send('Failed to sbiribare user');
                         await delay(DELAY_TIME);
